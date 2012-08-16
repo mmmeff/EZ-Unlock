@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">EZ-Unlock</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">EZ-Unlock</string>
+    <string name="version">1.0</string>
+    <string name="descrip"></string>
+    <string name="button_unlock">Unlock</string>
+    <string name="button_lock">Lock</string>
+    <string name="device_status">Device Status: </string>
+
+</resources>
