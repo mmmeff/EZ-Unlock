@@ -28,7 +28,6 @@ public class Commander {
 			process = Runtime.getRuntime().exec("su");
 			input = new DataOutputStream(process.getOutputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
 			Log.e(TAG, e.getMessage()); 
 		}
 	}
@@ -43,7 +42,6 @@ public class Commander {
 			input.writeBytes(command + "\n");
 			input.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
 			Log.e(TAG, e.getMessage());
 			result = false;
 		}
