@@ -7,6 +7,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
+
 /** serves as an interface for running console commands in the android os **/
 public class Commander {
 	
@@ -48,15 +52,17 @@ public class Commander {
 		return result;
 	}
 	
+	/**
+	 * Lock the bootloader, duh!
+	 * @return boolean representing success
+	 */
 	public boolean Lock(){
 		if (ExecSingle("dd if=/sdcard/ezunlock/lock.img of=/dev/block/mmcblk0p5")){
-			PreferencesSingleton.getInstance(context).prefs.edit().putString("status", "locked").commit();
 			Toast toast = Toast.makeText(context,
 					"Bootloader succesfully locked!", Toast.LENGTH_LONG);
 			toast.show();
 			return true;
 		} else {
-			PreferencesSingleton.getInstance(context).prefs.edit().putString("status", null).commit();
 			Toast toast = Toast.makeText(context,
 					"Bootloader lock failed!!! Are you rooted?", Toast.LENGTH_LONG);
 			toast.show();
@@ -66,20 +72,59 @@ public class Commander {
 		
 	}
 	
+	/**
+	 * Lock the bootloader...
+	 * @return boolean representing success
+	 */
 	public boolean UnLock(){
 		if (ExecSingle("dd if=/sdcard/ezunlock/unlock.img of=/dev/block/mmcblk0p5")){
-			PreferencesSingleton.getInstance(context).prefs.edit().putString("status", "unlocked").commit();
 			Toast toast = Toast.makeText(context,
 					"Bootloader succesfully unlocked!", Toast.LENGTH_LONG);
 			toast.show();
 			return true;
 		} else {
-			PreferencesSingleton.getInstance(context).prefs.edit().putString("status", null).commit();
 			Toast toast = Toast.makeText(context,
 					"Bootloader unlock failed! Are you rooted?", Toast.LENGTH_LONG);
 			toast.show();
 			return false;
 		}
 		
+	}
+
+	/**
+	 * compare sha1 hash of current bootloader to unlocked bootloader
+	 * if no match, return false
+	 * @return status of bootloader lock
+	 */
+	public boolean isLocked(FileMan fileman) {
+		try {
+			if (SHAsum(fileman.getCurrentBootloader(this)).equals(SHAsum(fileman.getLockedBootloader()))){
+				return true;
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static String SHAsum(byte[] convertme) throws NoSuchAlgorithmException{
+	    MessageDigest md = MessageDigest.getInstance("SHA-1"); 
+	    return byteArray2Hex(md.digest(convertme));
+	}
+
+	private static String byteArray2Hex(final byte[] hash) {
+	    Formatter formatter = new Formatter();
+	    for (byte b : hash) {
+	        formatter.format("%02x", b);
+	    }
+	    return formatter.toString();
+	}
+
+	public void backupBootloader() {
+		ExecSingle("dd if=/dev/block/mmcblk0p5 of=/sdcard/ezunlock/backup.img");
 	}
 }

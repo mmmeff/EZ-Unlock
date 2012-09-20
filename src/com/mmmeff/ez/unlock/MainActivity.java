@@ -2,7 +2,6 @@ package com.mmmeff.ez.unlock;
 
 import com.stericson.RootTools.RootTools;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,7 +21,8 @@ public class MainActivity extends Activity {
 	TextView statusText;
 	Button lockButton, unlockButton;
 	private Context context = this;
-	private final boolean DEBUG = false;
+	private Commander commander;
+	private FileMan fileman;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 		// check for root
 		if (RootTools.isRootAvailable()) {
 			// su exists, continue on
-		} else {
+		} else { // warn about lack of root
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
@@ -57,15 +57,8 @@ public class MainActivity extends Activity {
 			rootDialog.show();
 		}
 
-		@SuppressWarnings("unused")
-		FileMan fileman = new FileMan(this);
-		final Commander commander = new Commander(this);
-
-		if (DEBUG)
-			PreferencesSingleton.getInstance(this).prefs.edit().clear()
-					.commit();
-
-		final MediaPlayer easySound = MediaPlayer.create(context, R.raw.easy);
+		fileman = new FileMan(this);
+		commander = new Commander(this);
 
 		statusText = (TextView) findViewById(R.id.unlocktext);
 
@@ -76,8 +69,7 @@ public class MainActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 						case DialogInterface.BUTTON_POSITIVE:
-							if (commander.Lock())
-								easySound.start();
+							commander.Lock();
 							refreshStatus();
 							break;
 						case DialogInterface.BUTTON_NEGATIVE:
@@ -100,8 +92,7 @@ public class MainActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which) {
 						case DialogInterface.BUTTON_POSITIVE:
-							if (commander.UnLock())
-								easySound.start();
+							commander.UnLock();
 							refreshStatus();
 							break;
 						case DialogInterface.BUTTON_NEGATIVE:
@@ -121,27 +112,20 @@ public class MainActivity extends Activity {
 	}
 
 	private void refreshStatus() {
-		String status = PreferencesSingleton.getInstance(this).prefs.getString(
-				"status", null);
+		boolean locked = commander.isLocked(fileman);
 
-		if (status != null) {
-			if (status.equals("locked")) {
-				statusText.setText("Locked");
-				statusText.setTextColor(Color.RED);
-				lockButton.setEnabled(false);
-				unlockButton.setEnabled(true);
-			} else if (status.equals("unlocked")) {
-				statusText.setText("Unlocked");
-				statusText.setTextColor(Color.GREEN);
-				lockButton.setEnabled(true);
-				unlockButton.setEnabled(false);
-			}
-		} else {
-			statusText.setText("Unknown");
-			statusText.setTextColor(Color.YELLOW);
-			lockButton.setEnabled(true);
+		if (locked) {
+			statusText.setText("Locked");
+			statusText.setTextColor(Color.RED);
+			lockButton.setEnabled(false);
 			unlockButton.setEnabled(true);
+		} else {
+			statusText.setText("Unlocked");
+			statusText.setTextColor(Color.GREEN);
+			lockButton.setEnabled(true);
+			unlockButton.setEnabled(false);
 		}
+
 	}
 
 }
