@@ -23,10 +23,15 @@ public final class R {
         public static final int adView=0x7f080001;
         public static final int devicestatustext=0x7f080002;
         public static final int linearLayout1=0x7f080000;
+<<<<<<< HEAD
         public static final int linearLayoutButtons=0x7f080004;
         public static final int lockbutton=0x7f080006;
         public static final int menu_settings=0x7f080007;
         public static final int unlockbutton=0x7f080005;
+=======
+        public static final int menu_settings=0x7f080005;
+        public static final int unlockbutton=0x7f080004;
+>>>>>>> parent of 1006964... Added bootloader re-locking
         public static final int unlocktext=0x7f080003;
     }
     public static final class layout {
@@ -43,7 +48,10 @@ public final class R {
         public static final int device_status=0x7f050008;
         public static final int hello_world=0x7f050001;
         public static final int menu_settings=0x7f050002;
+<<<<<<< HEAD
         public static final int noroot=0x7f050009;
+=======
+>>>>>>> parent of 1006964... Added bootloader re-locking
         public static final int title_activity_main=0x7f050003;
         public static final int version=0x7f050004;
     }

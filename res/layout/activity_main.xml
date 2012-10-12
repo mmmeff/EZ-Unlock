@@ -32,33 +32,16 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#FFFFFF" />
 
-        <LinearLayout
-            android:id="@+id/linearLayoutButtons"
+        <Button
+            android:id="@+id/unlockbutton"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#000000" >
-
-            <Button
-                android:id="@+id/unlockbutton"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="30dp"
-                android:layout_weight="1.08"
-                android:text="@string/button_unlock"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/lockbutton"
-                android:layout_width="100dp"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="30dp"
-                android:text="@string/button_lock"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
+            android:layout_marginTop="30dp"
+            android:text="@string/button_unlock"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
-		
-		
+
 		<com.google.ads.AdView
 		    android:id="@+id/adView"
 		    android:layout_width="wrap_content"

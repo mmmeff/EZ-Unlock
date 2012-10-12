@@ -1,5 +1,6 @@
 package com.mmmeff.ez.unlock;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -37,21 +38,19 @@ public class Commander {
 	}
 	
 	/**
-	 * Run a single command while disregarding any output given besides errors
+	 * Run a single command while disregarding any output given
 	 * @param command
 	 */
-	private boolean ExecSingle(String command){
-		boolean result = true;
+	private void ExecSingle(String command){
 		try {
 			input.writeBytes(command + "\n");
 			input.flush();
 		} catch (IOException e) {
 			Log.e(TAG, e.getMessage());
-			result = false;
 		}
-		return result;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Lock the bootloader, duh!
 	 * @return boolean representing success
@@ -89,6 +88,22 @@ public class Commander {
 			return false;
 		}
 		
+=======
+	public void Lock(){
+		ExecSingle("dd if=/sdcard/ezunlock/lock.img of=/dev/block/mmcblk0p5");
+		PreferencesSingleton.getInstance(context).prefs.edit().putString("status", "locked").commit();
+		Toast toast = Toast.makeText(context,
+				"Bootloader succesfully locked!", Toast.LENGTH_LONG);
+		toast.show();
+	}
+	
+	public void UnLock(){
+		ExecSingle("dd if=/sdcard/ezunlock/unlock.img of=/dev/block/mmcblk0p5");
+		PreferencesSingleton.getInstance(context).prefs.edit().putString("status", "unlocked").commit();
+		Toast toast = Toast.makeText(context,
+				"Bootloader succesfully unlocked!", Toast.LENGTH_LONG);
+		toast.show();
+>>>>>>> parent of 1006964... Added bootloader re-locking
 	}
 
 	/**
